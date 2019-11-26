@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include "include/Music.h"
 
 // Screen dimension constants
 const int SCREEN_LEN_X = 640;
@@ -19,10 +20,10 @@ int main(int argc, char *argv[]) {
 	SDL_Window *window = NULL;
 
 	// The surface contained by the window
-	SDL_Surface *screenSurface = NULL;
+	SDL_Surface *screen = NULL;
 
 	// Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
 		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 	} else {
 		//Create window
@@ -31,16 +32,23 @@ int main(int argc, char *argv[]) {
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 		} else {
 			// Get window surface
-			screenSurface = SDL_GetWindowSurface(window);
+			screen = SDL_GetWindowSurface(window);
 
 			//Fill the surface white
-			SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF));
 
 			//Update the surface
 			SDL_UpdateWindowSurface(window);
 
+
+			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
+				printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
+			}
+
+			Music::Play("src/assets/audio/track-1.mp3");
+
 			//Wait two seconds
-			SDL_Delay(2000);
+			SDL_Delay(5000);
 		}
 	}
 

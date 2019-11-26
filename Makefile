@@ -5,7 +5,7 @@
 #
 
 # OBJS: specifies which files to compile as part of the project
-OBJS = src/main.cpp
+OBJS = src/main.cpp src/Music.cpp
 
 # CC: specifies which compiler to use
 CC = g++
@@ -14,7 +14,7 @@ CC = g++
 COMPILER_FLAGS = -Wall
 
 # LINKER_FLAGS: specifies the libraries to linking against
-LINKER_FLAGS = -lSDL2
+LINKER_FLAGS = -lSDL2 -lSDL2_mixer
 
 # OBJ_NAME: specifies the name of output
 OBJ_NAME = bin/main

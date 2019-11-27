@@ -9,6 +9,9 @@
 #include "include/Music.h"
 
 Mix_Music *Music::music = NULL;
+int Music::fade = MUSIC_FADE_DEFAULT;
+std::string Music::file = MUSIC_FILE_EMPTY;
+int Music::repeat = MUSIC_REPEAT_FOREVER;
 
 bool Music::Load(const std::string filepath) {
 	bool result = true;
@@ -17,8 +20,9 @@ bool Music::Load(const std::string filepath) {
 
 	try {
 		if (filepath.empty()) throw "Path to file can not be empty";
+		Music::file = filepath;
 
-		if (!(Music::music = Mix_LoadMUS(filepath.c_str()))) throw "Could not open given file";
+		if (!(Music::music = Mix_LoadMUS(Music::file.c_str()))) throw "Could not open given file";
 
 	} catch(const std::string message) {
 		result = false;
@@ -28,8 +32,9 @@ bool Music::Load(const std::string filepath) {
 }
 
 void Music::Stop(void) {
-	Mix_HaltMusic();
-	Mix_RewindMusic();
+	while ((!Mix_FadeOutMusic(Music::fade)) && Mix_PlayingMusic()) {
+		SDL_Delay(100);
+	}
 }
 
 void Music::Pause(void) {
@@ -45,15 +50,20 @@ void Music::Resume(void) {
 }
 
 void Music::Play(const std::string filepath) {
+	if (filepath.empty()) throw "Path to file can not be empty";
+
 	Music::Quit();
 	if (Music::Load(filepath)) Music::Play();
 }
 
 void Music::Play() {
-	if (Music::music) Mix_PlayMusic(Music::music, -1);
+	if (Music::music && Mix_PlayingMusic() != 1) {
+		Mix_FadeInMusic(Music::music, Music::repeat, Music::fade);
+	}
 }
 
 void Music::Quit(void) {
 	Music::Stop();
+	Mix_FreeMusic(Music::music);
 	Music::music = NULL;
 }

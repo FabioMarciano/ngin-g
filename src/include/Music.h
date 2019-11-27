@@ -9,7 +9,14 @@
 #ifndef __MUSIC_H__
     #define __MUSIC_H__ 1
 
+	#define MUSIC_REPEAT_FOREVER -1
+	#define MUSIC_REPEAT_ONCE 1
+	#define MUSIC_FADE_DEFAULT 0
+	#define MUSIC_FILE_EMPTY ""
+
+
 	#include <string>
+	#include "SDL2/SDL.h"
 	#include "SDL2/SDL_mixer.h"
 
 	class Music {
@@ -22,6 +29,24 @@
 		static Mix_Music *music;
 
 		public:
+
+		/**
+		 * @type int - Music fadeIn/Out value (0 to trigger off)
+		 * @static
+		*/
+		static int fade;
+
+		/**
+		 * @type int - Music repeat loop
+		 * @static
+		*/
+		static int repeat;
+
+		/**
+		 * @type string - Music file path
+		 * @static
+		*/
+		static std::string file;
 
 		/**
 		 * @static - Loads the music file

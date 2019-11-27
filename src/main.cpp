@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 #include <stdio.h>
+#include "include/Audio.h"
 #include "include/Music.h"
 
 // Screen dimension constants
@@ -40,15 +41,43 @@ int main(int argc, char *argv[]) {
 			//Update the surface
 			SDL_UpdateWindowSurface(window);
 
+			// Initialize audio system
+			Audio::Init();
 
-			if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) {
-				printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() );
-			}
-
-			Music::Play("src/assets/audio/track-1.mp3");
-
-			//Wait two seconds
+			// Plays an music
+			// Music::fade = 2000;
+			Music::repeat = MUSIC_REPEAT_FOREVER;
+			Music::file = "./assets/audio/music/bloody-tears.mp3";
+			Music::Play(Music::file);
+			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xFF, 0x00, 0x00));
+			SDL_UpdateWindowSurface(window);
+			//Wait 5 seconds
 			SDL_Delay(5000);
+			Music::Stop();
+			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0x80, 0x00, 0x00));
+			SDL_UpdateWindowSurface(window);
+			SDL_Delay(Music::fade);
+
+			// Music::Pause();
+			// SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0x00, 0xFF, 0x00));
+			// SDL_UpdateWindowSurface(window);
+			// SDL_Delay(2000);
+
+			// Music::Resume();
+			// SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0xFF, 0x00, 0xFF));
+			// SDL_UpdateWindowSurface(window);
+			// SDL_Delay(2000);
+
+			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0x00, 0x00, 0xFF));
+			SDL_UpdateWindowSurface(window);
+			Music::file = "./assets/audio/music/the-cave.mp3";
+			Music::Play(Music::file);
+			SDL_Delay(5000);
+			Music::Stop();
+			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0x00, 0x00, 0x90));
+			SDL_UpdateWindowSurface(window);
+			SDL_Delay(Music::fade);
+			Audio::Quit();
 		}
 	}
 

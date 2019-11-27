@@ -5,7 +5,7 @@
 #
 
 # OBJS: specifies which files to compile as part of the project
-OBJS = src/main.cpp src/Music.cpp
+OBJS = src/main.cpp src/Audio.cpp src/Music.cpp
 
 # CC: specifies which compiler to use
 CC = g++
